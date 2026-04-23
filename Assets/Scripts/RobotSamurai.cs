@@ -70,7 +70,7 @@ public class RobotSamurai : MonoBehaviour
         }
     }
 
-    public void SetState(State newState) //Call this in animation events
+    public void SetState(State newState) //Call this in animation events!! (To determine when the attack ends and stuff)
     {
         state = newState;
     }
