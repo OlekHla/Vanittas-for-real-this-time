@@ -25,6 +25,8 @@ public class RobotSamurai : MonoBehaviour
     [SerializeField] private AudioClip parrySound;
     [SerializeField] private AudioClip successfulParrySound;
     [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip doubleJumpSound;
+    [SerializeField] private AudioClip dashSound;
     [SerializeField] private AudioClip landSound;
     [SerializeField] private AudioClip footstepSound;
     [SerializeField] private AudioClip damageSound;
@@ -32,6 +34,12 @@ public class RobotSamurai : MonoBehaviour
 
     [SerializeField] private float audioVolume = 1f;
     [SerializeField] private float footstepSoundDelay = .25f;
+
+    [SerializeField] private List<SamuraiAbility> abilities = new List<SamuraiAbility>();
+
+    [SerializeField] private float DashSpeed = 12f;
+    [SerializeField] private float DashDuration = .15f;
+    [SerializeField] private float DashCooldown = .75f;
 
     [SerializeField] private float GroundSpeed;
     [SerializeField] private float AirSpeed;
@@ -54,7 +62,9 @@ public class RobotSamurai : MonoBehaviour
     protected int faceDirection = 1; //1 = right. -1 = left.
 
     private Boolean wasOnGround = true;
+    private Boolean canDoubleJump = false;
     private float footstepSoundTimer = 0f;
+    private float dashCooldownTimer = 0f;
 
 
     public enum State
@@ -64,6 +74,7 @@ public class RobotSamurai : MonoBehaviour
         LowAttack,
         Blocking,
         Parrying,
+        Dashing,
 
         Stunned
     }
@@ -121,6 +132,51 @@ public class RobotSamurai : MonoBehaviour
                 rb.simulated = true;
                 rb.linearVelocity = Vector2.zero;
             }
+
+            canDoubleJump = HasAbility(SamuraiAbility.DoubleJump);
+        }
+    }
+
+    public void ClearAbilities()
+    {
+        abilities.Clear();
+        canDoubleJump = false;
+    }
+
+    public void AddAbility(SamuraiAbility ability)
+    {
+        if (ability == SamuraiAbility.None)
+        {
+            return;
+        }
+
+        if (abilities.Contains(ability) == true)
+        {
+            return;
+        }
+
+        abilities.Add(ability);
+
+        if (ability == SamuraiAbility.DoubleJump && onGround == true)
+        {
+            canDoubleJump = true;
+        }
+    }
+
+    public Boolean HasAbility(SamuraiAbility ability)
+    {
+        return abilities.Contains(ability);
+    }
+
+    public void UseAbility(SamuraiAbility ability)
+    {
+        if (ability == SamuraiAbility.Dash)
+        {
+            Dash();
+        }
+        else if (ability == SamuraiAbility.DoubleJump)
+        {
+            DoubleJump();
         }
     }
 
@@ -266,6 +322,52 @@ public class RobotSamurai : MonoBehaviour
         StartCoroutine(hitbox.EnableForDuration(.1f));
     }
 
+    public void Dash()
+    {
+        if (controlsEnabled == false) { return; }
+        if (HasAbility(SamuraiAbility.Dash) == false) { return; }
+        if (state != State.None) { return; }
+        if (dashCooldownTimer > 0f) { return; }
+
+        StartCoroutine(DashRoutine());
+    }
+
+    protected IEnumerator DashRoutine()
+    {
+        state = State.Dashing;
+        dashCooldownTimer = DashCooldown;
+
+        PlaySound(dashSound);
+
+        float timer = 0f;
+
+        while (timer < DashDuration)
+        {
+            yield return null;
+
+            timer += Time.deltaTime;
+
+            if (rb != null)
+            {
+                rb.linearVelocity = new Vector2(DashSpeed * faceDirection, rb.linearVelocity.y);
+            }
+        }
+
+        if (state == State.Dashing)
+        {
+            state = State.None;
+        }
+    }
+
+    public void DoubleJump()
+    {
+        if (controlsEnabled == false) { return; }
+        if (HasAbility(SamuraiAbility.DoubleJump) == false) { return; }
+        if (onGround == true) { return; }
+
+        Jump();
+    }
+
     protected virtual void Die()
     {
         PlaySoundAtPosition(deathSound);
@@ -288,6 +390,12 @@ public class RobotSamurai : MonoBehaviour
     public void OnLandHit(Collider2D col)
     {
         RobotSamurai targetSamurai = col.gameObject.GetComponent<RobotSamurai>();
+
+        if (targetSamurai == null)
+        {
+            return;
+        }
+
         if (state == State.HighAttack)
         {
             if (targetSamurai.state == State.Parrying)
@@ -322,7 +430,16 @@ public class RobotSamurai : MonoBehaviour
     public void Walk(float h)
     {
         if (controlsEnabled == false) { return; }
-        if (state != State.None) { rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); return; }
+
+        if (state != State.None)
+        {
+            if (state != State.Dashing && rb != null)
+            {
+                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            }
+
+            return;
+        }
 
         TryPlayFootstepSound(h);
 
@@ -348,6 +465,23 @@ public class RobotSamurai : MonoBehaviour
         {
             PlaySound(jumpSound);
             rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+
+            if (HasAbility(SamuraiAbility.DoubleJump) == true)
+            {
+                canDoubleJump = true;
+            }
+        }
+        else if (HasAbility(SamuraiAbility.DoubleJump) == true && canDoubleJump == true)
+        {
+            canDoubleJump = false;
+
+            if (rb != null)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            }
+
+            PlaySound(doubleJumpSound);
+            rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
         }
     }
 
@@ -358,6 +492,11 @@ public class RobotSamurai : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (dashCooldownTimer > 0f)
+        {
+            dashCooldownTimer -= Time.deltaTime;
+        }
+
         wasOnGround = onGround;
 
         //onGround = true;
@@ -371,6 +510,7 @@ public class RobotSamurai : MonoBehaviour
 
         if (onGround == true && wasOnGround == false)
         {
+            canDoubleJump = HasAbility(SamuraiAbility.DoubleJump);
             PlaySound(landSound);
         }
 
