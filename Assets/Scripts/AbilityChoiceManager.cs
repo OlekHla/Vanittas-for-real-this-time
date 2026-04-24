@@ -8,14 +8,18 @@ public class AbilityChoiceManager : MonoBehaviour
     public static SamuraiAbility PlayerAbility = SamuraiAbility.None;
     public static SamuraiAbility BossAbility = SamuraiAbility.None;
 
+    [Header("Postacie")]
     [SerializeField] private Player player;
-    [SerializeField] private Boss boss;
 
+    [Header("Panel wyboru")]
     [SerializeField] private GameObject choicePanel;
+    [SerializeField] private Boolean showChoicePanelOnStart = false;
 
+    [Header("Umiejêtnoœci do wyboru")]
     [SerializeField] private SamuraiAbility firstAbility = SamuraiAbility.Dash;
     [SerializeField] private SamuraiAbility secondAbility = SamuraiAbility.DoubleJump;
 
+    [Header("Losowanie")]
     [SerializeField] private Boolean randomizeChoicesOnStart = false;
 
     [SerializeField]
@@ -25,9 +29,22 @@ public class AbilityChoiceManager : MonoBehaviour
         SamuraiAbility.DoubleJump
     };
 
+    public Boolean IsChoicePanelOpen
+    {
+        get
+        {
+            if (choicePanel == null)
+            {
+                return false;
+            }
+
+            return choicePanel.activeSelf;
+        }
+    }
+
     void Start()
     {
-        FindCharacters();
+        FindPlayer();
 
         if (randomizeChoicesOnStart == true)
         {
@@ -36,25 +53,20 @@ public class AbilityChoiceManager : MonoBehaviour
 
         if (choicePanel != null)
         {
-            choicePanel.SetActive(true);
+            choicePanel.SetActive(false);
         }
 
-        if (player != null)
+        if (showChoicePanelOnStart == true)
         {
-            player.SetControlsEnabled(false);
+            OpenChoicePanel();
         }
     }
 
-    private void FindCharacters()
+    private void FindPlayer()
     {
         if (player == null)
         {
             player = UnityEngine.Object.FindFirstObjectByType<Player>();
-        }
-
-        if (boss == null)
-        {
-            boss = UnityEngine.Object.FindFirstObjectByType<Boss>();
         }
     }
 
@@ -76,6 +88,25 @@ public class AbilityChoiceManager : MonoBehaviour
 
         firstAbility = availableAbilities[firstIndex];
         secondAbility = availableAbilities[secondIndex];
+    }
+
+    public void OpenChoicePanel()
+    {
+        FindPlayer();
+
+        if (choicePanel != null)
+        {
+            choicePanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Choice Panel nie jest podpiêty w AbilityChoiceManager.");
+        }
+
+        if (player != null)
+        {
+            player.SetControlsEnabled(false);
+        }
     }
 
     public void ChooseFirstAbility()
@@ -100,7 +131,7 @@ public class AbilityChoiceManager : MonoBehaviour
 
     public void ChooseAbility(SamuraiAbility chosenAbility)
     {
-        FindCharacters();
+        FindPlayer();
 
         SamuraiAbility otherAbility = GetOtherAbility(chosenAbility);
 
@@ -115,19 +146,13 @@ public class AbilityChoiceManager : MonoBehaviour
             player.SetControlsEnabled(true);
         }
 
-        if (boss != null)
-        {
-            boss.ClearAbilities();
-            boss.AddAbility(BossAbility);
-        }
-
         if (choicePanel != null)
         {
             choicePanel.SetActive(false);
         }
 
-        Debug.Log("Player ability: " + PlayerAbility);
-        Debug.Log("Boss ability: " + BossAbility);
+        Debug.Log("Wybrana umiejêtnoœæ gracza: " + PlayerAbility);
+        Debug.Log("Umiejêtnoœæ bossa zapisana na scenê boss fight: " + BossAbility);
     }
 
     private SamuraiAbility GetOtherAbility(SamuraiAbility chosenAbility)

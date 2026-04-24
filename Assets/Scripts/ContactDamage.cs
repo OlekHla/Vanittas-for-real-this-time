@@ -3,9 +3,17 @@ using UnityEngine;
 
 public class DamageOnHit : MonoBehaviour
 {
-    new private Collider2D collider; //The "new" keyword is there to suppress the icky warning over this variable name hiding an already deprecated property
-    public float damage = 1;
+    new private Collider2D collider;
+
+    [Header("Obra¿enia")]
+    public float damage = 1f;
+
+    [Header("Cooldown")]
     [SerializeField] private float damageCooldown = 0.25f;
+
+    [Header("Opcjonalny w³aœciciel, którego nie ranimy")]
+    [SerializeField] private GameObject owner;
+
     private float timer = 0f;
 
     void Awake()
@@ -13,23 +21,57 @@ public class DamageOnHit : MonoBehaviour
         collider = GetComponent<Collider2D>();
     }
 
-
     protected void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > damageCooldown)
+        if (collider == null)
         {
-            timer = 0;
-            List<Collider2D> res = new List<Collider2D>();
-            collider.Overlap(res);
-            foreach (Collider2D col in res)
-            { //Iterating over overlapping colliders
-                GameObject targetOwner = col.gameObject; //Getting the owner of the collider (in case we have an enemy with several colliders or smth)
-                if (targetOwner.tag != "Entity" && targetOwner.tag != "Player") { continue; }
+            return;
+        }
 
-                RobotSamurai victim = targetOwner.GetComponent<RobotSamurai>();
-                victim.TakeDamage(damage);
+        timer += Time.deltaTime;
+
+        if (timer < damageCooldown)
+        {
+            return;
+        }
+
+        timer = 0f;
+
+        List<Collider2D> results = new List<Collider2D>();
+        collider.Overlap(results);
+
+        foreach (Collider2D col in results)
+        {
+            if (col == null)
+            {
+                continue;
             }
+
+            if (col == collider)
+            {
+                continue;
+            }
+
+            Hitbox hitbox = col.GetComponentInParent<Hitbox>();
+
+            if (hitbox != null)
+            {
+                continue;
+            }
+
+            RobotSamurai victim = col.GetComponentInParent<RobotSamurai>();
+
+            if (victim == null)
+            {
+                continue;
+            }
+
+            if (owner != null && victim.gameObject == owner)
+            {
+                continue;
+            }
+
+            victim.TakeDamage(damage);
         }
     }
 }
