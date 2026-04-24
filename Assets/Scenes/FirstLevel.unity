@@ -1066,11 +1066,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.27
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.57
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2336,6 +2336,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelDoor
   targetSceneName: FirstLevel_BossFight
   targetSpawnPointId: FromLevel1Door
+  inputThingie: {fileID: 0}
+  SpriteRenderer: {fileID: 0}
+  openDoor: {fileID: 0}
+  plr: {fileID: 0}
 --- !u!61 &636917043
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3221,9 +3225,9 @@ RectTransform:
   - {fileID: 1103191396}
   m_Father: {fileID: 248398889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1280, y: 720}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2560, y: 1440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &867723410

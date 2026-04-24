@@ -1978,7 +1978,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 3}
     oldSize: {x: 1.82, y: 0.33}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
@@ -2133,7 +2133,7 @@ MonoBehaviour:
   GroundSpeed: 5
   AirSpeed: 5
   JumpForce: 5
-  Health: 1
+  Health: 6
   MaxHealth: 6
   ParryWindow: 1
   HighHitboxSize: {x: 1, y: 4}
