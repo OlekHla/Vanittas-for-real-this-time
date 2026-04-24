@@ -1,22 +1,49 @@
 using System;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelDoor : MonoBehaviour
 {
     [SerializeField] private string targetSceneName;
     [SerializeField] private string targetSpawnPointId;
+    public GameObject inputThingie;
+    public SpriteRenderer SpriteRenderer;
+    public Sprite openDoor;
 
+    public Player plr;
+    
     private Boolean hasBeenUsed = false;
+    private Boolean open = false;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void CheckResult(TMP_InputField input)
     {
-        if (hasBeenUsed == true)
+        Debug.Log(input.text);
+        if(input.text == "7" || input.text.ToLower() == "siedem")
         {
-            return;
+            HideInput();
+            SpriteRenderer.sprite = openDoor;
+            open = true;
+            Transport(plr);
         }
+        else
+        {
+            Debug.Log("u stupi");
+        }
+    }
 
-        Player player = other.GetComponentInParent<Player>();
+    public void ShowInput()
+    {
+        inputThingie.SetActive(true);
+    }
+    public void HideInput()
+    {
+        inputThingie.SetActive(false);
+    }
 
+    void Transport(Player player)
+    {
         if (player == null)
         {
             return;
@@ -30,5 +57,24 @@ public class LevelDoor : MonoBehaviour
 
         hasBeenUsed = true;
         LevelTransitionManager.Instance.TransitionToScene(targetSceneName, targetSpawnPointId);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (open == false) 
+        {
+            if (!inputThingie.activeSelf)
+            {
+                ShowInput();
+            }
+            return;
+        }
+        if (hasBeenUsed == true)
+        {
+            return;
+        }
+
+        Player player = other.GetComponentInParent<Player>();
+        Transport(player);
     }
 }

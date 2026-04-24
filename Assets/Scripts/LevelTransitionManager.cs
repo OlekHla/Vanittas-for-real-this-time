@@ -106,7 +106,7 @@ public class LevelTransitionManager : MonoBehaviour
         isTransitioning = false;
     }
 
-    private IEnumerator Fade(float startAlpha, float targetAlpha, float duration)
+    public IEnumerator Fade(float startAlpha, float targetAlpha, float duration)
     {
         if (fadeCanvasGroup == null)
         {

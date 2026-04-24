@@ -9,12 +9,12 @@ using UnityEngine.SceneManagement;
 
 public class RobotSamurai : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] protected Rigidbody2D rb;
     [SerializeField] private Collider2D groundDetection;
     [SerializeField] private LayerMask groundDetectionLayerMask;
     [SerializeField] private Hitbox hitbox;
 
-    private Animator animator;
+    protected Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Boolean spriteFacesRightByDefault = true;
 
@@ -46,7 +46,7 @@ public class RobotSamurai : MonoBehaviour
     [SerializeField] private float AirSpeed;
     [SerializeField] private float JumpForce;
 
-    [SerializeField] private float Health;
+    [SerializeField] protected float Health;
     [SerializeField] private float MaxHealth;
 
     [SerializeField] private float ParryWindow = 1f;
@@ -343,9 +343,6 @@ public class RobotSamurai : MonoBehaviour
         hitbox.transform.localPosition = new Vector3((LowHitboxSize.x / 2 + LowHitboxOffset.x + .5f) * faceDirection, LowHitboxSize.y / 2 + LowHitboxOffset.y, 0);
 
         animator.Play("Base Layer.LowAttack");
-
-        StartCoroutine(SetStateForDuration(State.LowAttack, .25f));
-        StartCoroutine(hitbox.EnableForDuration(.1f));
     }
 
     public void Dash()
@@ -439,8 +436,10 @@ public class RobotSamurai : MonoBehaviour
         }
         else if (state == State.LowAttack)
         {
+            Debug.Log("bruh.");
             if (targetSamurai.onGround == false)
             {
+                Debug.Log("sfjwioqjgwqg");
                 //Jumped over ggez
             }
             else
