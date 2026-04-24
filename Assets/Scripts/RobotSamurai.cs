@@ -30,6 +30,7 @@ public class RobotSamurai : MonoBehaviour
     [SerializeField] private Vector2 LowHitboxOffset;
 
     protected Boolean onGround = true;
+    protected Boolean controlsEnabled = true;
     protected State state = State.None;
     protected int faceDirection = 1; //1 = right. -1 = left.
 
@@ -50,6 +51,35 @@ public class RobotSamurai : MonoBehaviour
     {
     }
 
+    public void SetControlsEnabled(Boolean enabled)
+    {
+        controlsEnabled = enabled;
+
+        if (enabled == false)
+        {
+            state = State.None;
+
+            if (hitbox != null)
+            {
+                hitbox.Disable();
+            }
+
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.simulated = false;
+            }
+        }
+        else
+        {
+            if (rb != null)
+            {
+                rb.simulated = true;
+                rb.linearVelocity = Vector2.zero;
+            }
+        }
+    }
+
     protected IEnumerator SetStateForDuration(State newState, float duration)
     {
         state = newState;
@@ -58,11 +88,11 @@ public class RobotSamurai : MonoBehaviour
         {
             yield return null; //wait a frame
             timer += Time.deltaTime;
-            if(state != newState)
+            if (state != newState)
             {
                 yield break; //If state updated, disregard this counter
             }
-            if(timer >= duration)
+            if (timer >= duration)
             {
                 state = State.None;
                 break; //Exit the loop and reset the state yay
@@ -77,6 +107,7 @@ public class RobotSamurai : MonoBehaviour
 
     protected virtual void Parry()
     {
+        if (controlsEnabled == false) { return; }
         if (state != State.None || onGround == false) { return; }
         Debug.Log("Parrying");
         StartCoroutine(SetStateForDuration(State.Parrying, ParryWindow));
@@ -94,7 +125,8 @@ public class RobotSamurai : MonoBehaviour
 
     protected virtual void HighAttack()
     {
-        if (state != State.None) { return;  }
+        if (controlsEnabled == false) { return; }
+        if (state != State.None) { return; }
         hitbox.transform.localScale = HighHitboxSize;
         hitbox.transform.localPosition = new Vector3((HighHitboxSize.x / 2 + HighHitboxOffset.x + .5f) * faceDirection, HighHitboxSize.y / 2 + HighHitboxOffset.y, 0);
         StartCoroutine(SetStateForDuration(State.HighAttack, .25f));
@@ -102,6 +134,7 @@ public class RobotSamurai : MonoBehaviour
     }
     protected virtual void LowAttack()
     {
+        if (controlsEnabled == false) { return; }
         if (state != State.None) { return; }
         hitbox.transform.localScale = LowHitboxSize;
         hitbox.transform.localPosition = new Vector3((LowHitboxSize.x / 2 + LowHitboxOffset.x + .5f) * faceDirection, LowHitboxSize.y / 2 + LowHitboxOffset.y, 0);
@@ -143,7 +176,7 @@ public class RobotSamurai : MonoBehaviour
         }
         else if (state == State.LowAttack)
         {
-            if(targetSamurai.onGround == false)
+            if (targetSamurai.onGround == false)
             {
                 //Jumped over ggez
             }
@@ -157,7 +190,8 @@ public class RobotSamurai : MonoBehaviour
 
     public void Walk(float h)
     {
-        if(state != State.None) { rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); return; }
+        if (controlsEnabled == false) { return; }
+        if (state != State.None) { rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); return; }
 
         //Play animation
         if (onGround)
@@ -172,6 +206,7 @@ public class RobotSamurai : MonoBehaviour
 
     public void Jump()
     {
+        if (controlsEnabled == false) { return; }
         if (state != State.None) { return; }
 
         //Play animation

@@ -8,7 +8,7 @@ public class Player : RobotSamurai
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     protected override void Die()
@@ -20,9 +20,14 @@ public class Player : RobotSamurai
     // Update is called once per frame
     void Update()
     {
+        if (controlsEnabled == false)
+        {
+            return;
+        }
+
         if (boss != null)
         {
-            if(boss.transform.position.x < transform.position.x)
+            if (boss.transform.position.x < transform.position.x)
             {
                 faceDirection = -1;
             }
@@ -36,7 +41,7 @@ public class Player : RobotSamurai
         {
             Vector2 cursorPos = Input.mousePosition;
             float cursorHeightPercent = Input.mousePosition.y / Screen.height;
-            if(cursorHeightPercent <= .4)
+            if (cursorHeightPercent <= .4)
             {
                 LowAttack();
             }
