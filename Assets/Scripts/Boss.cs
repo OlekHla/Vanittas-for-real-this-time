@@ -7,11 +7,6 @@ public class Boss : RobotSamurai
 {
     public Player player;
 
-    [SerializeField] private float PreferableDistance = 2f; //The distance at which the Boss will attempt to stay at relative to the player
-
-    private Action currentAction = new Action("None", 0, 0); //Defines the current action chosen by NPC to do (tells the code to not start another one until this one is over)
-    private float currentActionDuration = 0f; //Defines how long until the current action is over and it expires
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,14 +27,23 @@ public class Boss : RobotSamurai
             {
                 faceDirection = 1;
             }
-
-            RefreshFacingDirection();
         }
         else
         {
             faceDirection = -1;
         }
+
+        AbilityChoiceManager.ApplySavedAbilitiesToBoss(this);
+
+        RefreshFacingDirection();
     }
+
+    // Update is called once per frame
+
+    [SerializeField] private float PreferableDistance = 2f; //The distance at which the Boss will attempt to stay at relative to the player
+
+    private Action currentAction = new Action("None", 0, 0); //Defines the current action chosen by NPC to do (tells the code to not start another one until this one is over)
+    private float currentActionDuration = 0f; //Defines how long until the current action is over and it expires
 
     IEnumerator _walkConstant(int h, bool bait)
     {
@@ -47,10 +51,17 @@ public class Boss : RobotSamurai
         while (currentActionDuration > 0f && currentAction.name == oldAction.name)
         {
             yield return null;
+
+            if (player == null)
+            {
+                yield break;
+            }
+
             if (bait & Math.Abs(player.transform.position.x - transform.position.x) <= PreferableDistance)
             {
                 h *= -1;
             }
+
             Walk(faceDirection * h);
 
             if (Math.Abs(player.transform.position.x - transform.position.x) <= 1.5f) //if too close then GET AWAY
@@ -72,6 +83,7 @@ public class Boss : RobotSamurai
 
     public void Bait()
     {
+
         StartCoroutine(_walkConstant(-1, true));
         //Approach the player and move away as soon as they reach preferable distance
     }
@@ -101,8 +113,21 @@ public class Boss : RobotSamurai
 
     public void ChooseAnAction() //Get a random action and activate it
     {
-        int r = UnityEngine.Random.Range(0, actions.Count);
-        Action action = actions[r];
+        List<Action> possibleActions = new List<Action>(actions);
+
+        if (HasAbility(SamuraiAbility.Dash) == true)
+        {
+            possibleActions.Add(new Action("Dash", .2f));
+        }
+
+        if (HasAbility(SamuraiAbility.DoubleJump) == true)
+        {
+            possibleActions.Add(new Action("DoubleJump", .1f));
+        }
+
+        int r = UnityEngine.Random.Range(0, possibleActions.Count);
+        Action action = possibleActions[r];
+
         Debug.Log(action.name);
         currentAction = action;
         StartCoroutine(currentActionCountdownorsomthishngs(action.duration));
@@ -167,5 +192,6 @@ public class Boss : RobotSamurai
         }
 
         ChooseAnAction();
+
     }
 }
