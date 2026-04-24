@@ -21,8 +21,10 @@ public class Player : RobotSamurai
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
+        base.Update();
+
         if (controlsEnabled == false)
         {
             return;
@@ -78,7 +80,6 @@ public class Player : RobotSamurai
         {
             Parry();
         }
-
         base.Walk(h);
 
         if (Input.GetButtonDown("Jump"))
