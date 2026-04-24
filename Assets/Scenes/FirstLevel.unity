@@ -273,6 +273,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3029787494468801382, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.454902
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029787494468801382, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.5294118
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029787494468801382, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.6431373
+      objectReference: {fileID: 0}
     - target: {fileID: 5309873762718766634, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: jumpSound
       value: 
@@ -323,11 +335,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.823029
+      value: 22.71
       objectReference: {fileID: 0}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.70079
+      value: 2.61
       objectReference: {fileID: 0}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.z
@@ -616,14 +628,14 @@ RectTransform:
   m_GameObject: {fileID: 400710572}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1865881983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 7.23, y: 78}
+  m_AnchoredPosition: {x: -0.6, y: -13}
   m_SizeDelta: {x: 236.46, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &400710574
@@ -646,10 +658,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Question here
+  m_text: "Ile r\xF3wna si\u0119 2+2?"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
+  m_sharedMaterial: {fileID: -5885483305710753355, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -680,7 +692,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -828,6 +840,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &485418965 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5309873762718766634, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+  m_PrefabInstance: {fileID: 248398888}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485418952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 574b380178382c94dbbd4812659c4ff7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
 --- !u!1 &497628746
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,6 +1408,7 @@ GameObject:
   - component: {fileID: 636917045}
   - component: {fileID: 636917043}
   - component: {fileID: 636917042}
+  - component: {fileID: 636917046}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -1406,6 +1430,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelDoor
   targetSceneName: FirstLevel_BossFight
   targetSpawnPointId: FromLevel1Door
+  inputThingie: {fileID: 619296057}
+  SpriteRenderer: {fileID: 636917045}
+  openDoor: {fileID: -3491923112297647643, guid: c433245d8b3d58842b9109a634b1cbf1, type: 3}
+  plr: {fileID: 485418965}
 --- !u!61 &636917043
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1440,7 +1468,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -5.1354303, y: 0.30140257}
+  m_Offset: {x: 0.04418075, y: 0.30140257}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1450,7 +1478,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 15.119541, y: 7.7699594}
+  m_Size: {x: 4.7603188, y: 7.7699594}
   m_EdgeRadius: 0
 --- !u!4 &636917044
 Transform:
@@ -1527,6 +1555,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &636917046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636917041}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 441b491ba2a3e5e4da12c23d310df48b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TheDoor
 --- !u!1 &667956791
 GameObject:
   m_ObjectHideFlags: 0
@@ -3456,15 +3496,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u200B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
+  m_sharedMaterial: {fileID: -5885483305710753355, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4495,17 +4535,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter text...
+  m_text: Enter answer...
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
+  m_sharedMaterial: {fileID: -5885483305710753355, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2150773298
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+    rgba: 2164260863
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.5}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5143,7 +5183,7 @@ RectTransform:
   m_GameObject: {fileID: 1865881982}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 400710573}
@@ -5152,7 +5192,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -4.6, y: 16.9}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1865881984
@@ -5168,15 +5208,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e638dc02e1017cb449d87d6e7dc429c2, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -5816,15 +5856,15 @@ RectTransform:
   m_GameObject: {fileID: 2096879257}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 971135502}
   m_Father: {fileID: 1865881983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 10.81, y: 28.000002}
+  m_AnchoredPosition: {x: 2.9800043, y: 7.29998}
   m_SizeDelta: {x: 229.3, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2096879259
@@ -5888,7 +5928,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 636917042}
+        m_TargetAssemblyTypeName: LevelDoor, Assembly-CSharp
+        m_MethodName: CheckResult
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2096879259}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -5918,7 +5970,7 @@ MonoBehaviour:
   m_CaretWidth: 1
   m_ReadOnly: 0
   m_RichText: 1
-  m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_GlobalFontAsset: {fileID: 11400000, guid: 7d6c9403bc14c4544871616987f8e46e, type: 2}
   m_OnFocusSelectAll: 1
   m_ResetOnDeActivation: 1
   m_KeepTextSelectionVisible: 0
@@ -5948,8 +6000,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: ca63a9c9c3445f34e854edff44cc0541, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
