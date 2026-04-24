@@ -8,7 +8,10 @@ public class Player : RobotSamurai
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        if (boss == null)
+        {
+            boss = UnityEngine.Object.FindFirstObjectByType<Boss>();
+        }
     }
 
     protected override void Die()
@@ -25,6 +28,13 @@ public class Player : RobotSamurai
             return;
         }
 
+        if (boss == null)
+        {
+            boss = UnityEngine.Object.FindFirstObjectByType<Boss>();
+        }
+
+        var h = Input.GetAxis("Horizontal");
+
         if (boss != null)
         {
             if (boss.transform.position.x < transform.position.x)
@@ -36,6 +46,19 @@ public class Player : RobotSamurai
                 faceDirection = 1;
             }
         }
+        else
+        {
+            if (h < 0)
+            {
+                faceDirection = -1;
+            }
+            else if (h > 0)
+            {
+                faceDirection = 1;
+            }
+        }
+
+        RefreshFacingDirection();
 
         if (Input.GetMouseButtonDown(0)) //left click
         {
@@ -56,7 +79,6 @@ public class Player : RobotSamurai
             Parry();
         }
 
-        var h = Input.GetAxis("Horizontal");
         base.Walk(h);
 
         if (Input.GetButtonDown("Jump"))

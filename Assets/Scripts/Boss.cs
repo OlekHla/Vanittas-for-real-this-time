@@ -1,26 +1,45 @@
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 public class Boss : RobotSamurai
 {
     public Player player;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        faceDirection = -1;
-    }
-
-    // Update is called once per frame
-
     [SerializeField] private float PreferableDistance = 2f; //The distance at which the Boss will attempt to stay at relative to the player
 
     private Action currentAction = new Action("None", 0, 0); //Defines the current action chosen by NPC to do (tells the code to not start another one until this one is over)
     private float currentActionDuration = 0f; //Defines how long until the current action is over and it expires
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        if (player == null)
+        {
+            player = UnityEngine.Object.FindFirstObjectByType<Player>();
+        }
+
+        if (player != null)
+        {
+            player.boss = this;
+
+            if (player.transform.position.x < transform.position.x)
+            {
+                faceDirection = -1;
+            }
+            else
+            {
+                faceDirection = 1;
+            }
+
+            RefreshFacingDirection();
+        }
+        else
+        {
+            faceDirection = -1;
+        }
+    }
 
     IEnumerator _walkConstant(int h, bool bait)
     {
@@ -46,14 +65,13 @@ public class Boss : RobotSamurai
         StartCoroutine(_walkConstant(1, false));
     }
 
-    public void WalkBackwards() 
+    public void WalkBackwards()
     {
         StartCoroutine(_walkConstant(-1, false));
     }
 
     public void Bait()
     {
-
         StartCoroutine(_walkConstant(-1, true));
         //Approach the player and move away as soon as they reach preferable distance
     }
@@ -83,7 +101,7 @@ public class Boss : RobotSamurai
 
     public void ChooseAnAction() //Get a random action and activate it
     {
-        int r = (int)Mathf.Floor(UnityEngine.Random.Range(0, actions.Count - 1));
+        int r = UnityEngine.Random.Range(0, actions.Count);
         Action action = actions[r];
         Debug.Log(action.name);
         currentAction = action;
@@ -118,9 +136,19 @@ public class Boss : RobotSamurai
     }
 
     List<Action> actions = new List<Action>() { new Action("HighAttack"), new Action("LowAttack"), new Action("Parry"), new Action("Jump"), new Action("WalkForward", .75f), new Action("WalkBackwards", .75f), new Action("Bait", 1f) };
-   
+
     void Update()
     {
+        if (player == null)
+        {
+            player = UnityEngine.Object.FindFirstObjectByType<Player>();
+
+            if (player != null)
+            {
+                player.boss = this;
+            }
+        }
+
         if (player != null)
         {
             if (player.transform.position.x < transform.position.x)
@@ -139,6 +167,5 @@ public class Boss : RobotSamurai
         }
 
         ChooseAnAction();
-
     }
 }

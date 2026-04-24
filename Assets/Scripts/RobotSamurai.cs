@@ -14,6 +14,25 @@ public class RobotSamurai : MonoBehaviour
     [SerializeField] private LayerMask groundDetectionLayerMask;
     [SerializeField] private Hitbox hitbox;
 
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Boolean spriteFacesRightByDefault = true;
+
+    [SerializeField] private AudioSource audioSource;
+
+    [SerializeField] private AudioClip highAttackSound;
+    [SerializeField] private AudioClip lowAttackSound;
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip parrySound;
+    [SerializeField] private AudioClip successfulParrySound;
+    [SerializeField] private AudioClip jumpSound;
+    [SerializeField] private AudioClip landSound;
+    [SerializeField] private AudioClip footstepSound;
+    [SerializeField] private AudioClip damageSound;
+    [SerializeField] private AudioClip deathSound;
+
+    [SerializeField] private float audioVolume = 1f;
+    [SerializeField] private float footstepSoundDelay = .25f;
+
     [SerializeField] private float GroundSpeed;
     [SerializeField] private float AirSpeed;
     [SerializeField] private float JumpForce;
@@ -34,6 +53,9 @@ public class RobotSamurai : MonoBehaviour
     protected State state = State.None;
     protected int faceDirection = 1; //1 = right. -1 = left.
 
+    private Boolean wasOnGround = true;
+    private float footstepSoundTimer = 0f;
+
 
     public enum State
     {
@@ -44,6 +66,28 @@ public class RobotSamurai : MonoBehaviour
         Parrying,
 
         Stunned
+    }
+
+    protected virtual void Awake()
+    {
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.playOnAwake = false;
+
+        RefreshFacingDirection();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -80,6 +124,75 @@ public class RobotSamurai : MonoBehaviour
         }
     }
 
+    protected void RefreshFacingDirection()
+    {
+        if (spriteRenderer == null)
+        {
+            return;
+        }
+
+        if (spriteFacesRightByDefault == true)
+        {
+            spriteRenderer.flipX = faceDirection == -1;
+        }
+        else
+        {
+            spriteRenderer.flipX = faceDirection == 1;
+        }
+    }
+
+    protected void PlaySound(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        if (audioSource == null)
+        {
+            return;
+        }
+
+        audioSource.PlayOneShot(clip, audioVolume);
+    }
+
+    protected void PlaySoundAtPosition(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            return;
+        }
+
+        AudioSource.PlayClipAtPoint(clip, transform.position, audioVolume);
+    }
+
+    protected void TryPlayFootstepSound(float movementInput)
+    {
+        if (footstepSound == null)
+        {
+            return;
+        }
+
+        if (onGround == false)
+        {
+            return;
+        }
+
+        if (Mathf.Abs(movementInput) <= .1f)
+        {
+            footstepSoundTimer = 0f;
+            return;
+        }
+
+        footstepSoundTimer -= Time.deltaTime;
+
+        if (footstepSoundTimer <= 0f)
+        {
+            PlaySound(footstepSound);
+            footstepSoundTimer = footstepSoundDelay;
+        }
+    }
+
     protected IEnumerator SetStateForDuration(State newState, float duration)
     {
         state = newState;
@@ -109,12 +222,17 @@ public class RobotSamurai : MonoBehaviour
     {
         if (controlsEnabled == false) { return; }
         if (state != State.None || onGround == false) { return; }
+
+        PlaySound(parrySound);
+
         Debug.Log("Parrying");
         StartCoroutine(SetStateForDuration(State.Parrying, ParryWindow));
     }
 
     protected virtual void OnParry()
     {
+        PlaySound(successfulParrySound);
+
         Debug.Log("Hah! gitgud!");
         state = State.None; //Reset state, so the one who parried can instantly counter-attack
 
@@ -127,6 +245,9 @@ public class RobotSamurai : MonoBehaviour
     {
         if (controlsEnabled == false) { return; }
         if (state != State.None) { return; }
+
+        PlaySound(highAttackSound);
+
         hitbox.transform.localScale = HighHitboxSize;
         hitbox.transform.localPosition = new Vector3((HighHitboxSize.x / 2 + HighHitboxOffset.x + .5f) * faceDirection, HighHitboxSize.y / 2 + HighHitboxOffset.y, 0);
         StartCoroutine(SetStateForDuration(State.HighAttack, .25f));
@@ -136,6 +257,9 @@ public class RobotSamurai : MonoBehaviour
     {
         if (controlsEnabled == false) { return; }
         if (state != State.None) { return; }
+
+        PlaySound(lowAttackSound);
+
         hitbox.transform.localScale = LowHitboxSize;
         hitbox.transform.localPosition = new Vector3((LowHitboxSize.x / 2 + LowHitboxOffset.x + .5f) * faceDirection, LowHitboxSize.y / 2 + LowHitboxOffset.y, 0);
         StartCoroutine(SetStateForDuration(State.LowAttack, .25f));
@@ -144,12 +268,15 @@ public class RobotSamurai : MonoBehaviour
 
     protected virtual void Die()
     {
+        PlaySoundAtPosition(deathSound);
         Destroy(gameObject);
     }
 
     public void TakeDamage(float amount)
     {
         //play animation
+        PlaySound(damageSound);
+
         Health = Mathf.Clamp(Health - amount, 0, MaxHealth);
         Debug.Log(Health);
         if (Health <= 0)
@@ -170,6 +297,8 @@ public class RobotSamurai : MonoBehaviour
             }
             else
             {
+                PlaySound(hitSound);
+
                 targetSamurai.TakeDamage(1);
                 StartCoroutine(targetSamurai.SetStateForDuration(State.Stunned, .1f));
             }
@@ -182,6 +311,8 @@ public class RobotSamurai : MonoBehaviour
             }
             else
             {
+                PlaySound(hitSound);
+
                 targetSamurai.TakeDamage(1);
                 StartCoroutine(targetSamurai.SetStateForDuration(State.Stunned, 5f));
             }
@@ -192,6 +323,8 @@ public class RobotSamurai : MonoBehaviour
     {
         if (controlsEnabled == false) { return; }
         if (state != State.None) { rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); return; }
+
+        TryPlayFootstepSound(h);
 
         //Play animation
         if (onGround)
@@ -213,6 +346,7 @@ public class RobotSamurai : MonoBehaviour
         //Change state
         if (onGround)
         {
+            PlaySound(jumpSound);
             rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
         }
     }
@@ -224,6 +358,8 @@ public class RobotSamurai : MonoBehaviour
 
     private void LateUpdate()
     {
+        wasOnGround = onGround;
+
         //onGround = true;
         List<Collider2D> res = new List<Collider2D>();
         ContactFilter2D groundContactFilter = new ContactFilter2D();
@@ -232,5 +368,12 @@ public class RobotSamurai : MonoBehaviour
         int hits = groundDetection.Overlap(groundContactFilter, res);
 
         onGround = hits > 0;
+
+        if (onGround == true && wasOnGround == false)
+        {
+            PlaySound(landSound);
+        }
+
+        RefreshFacingDirection();
     }
 }
