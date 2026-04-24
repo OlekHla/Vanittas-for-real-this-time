@@ -322,18 +322,24 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5507844960589853324}
   spriteFacesRightByDefault: 1
   audioSource: {fileID: -6802678511380462219}
-  highAttackSound: {fileID: 8300000, guid: c5bc583d188d3fa4382292a69ea4b2a4, type: 3}
-  lowAttackSound: {fileID: 8300000, guid: ce750035af9f24846b6f4a926fa07f81, type: 3}
+  highAttackSound: {fileID: 8300000, guid: ce750035af9f24846b6f4a926fa07f81, type: 3}
+  lowAttackSound: {fileID: 8300000, guid: c5bc583d188d3fa4382292a69ea4b2a4, type: 3}
   hitSound: {fileID: 0}
   parrySound: {fileID: 0}
   successfulParrySound: {fileID: 0}
   jumpSound: {fileID: 8300000, guid: e2ab270b6d34cc14694fd5cbab9adfe7, type: 3}
+  doubleJumpSound: {fileID: 0}
+  dashSound: {fileID: 0}
   landSound: {fileID: 0}
   footstepSound: {fileID: 0}
   damageSound: {fileID: 8300000, guid: 96836e163d58ca54da021b362009e854, type: 3}
   deathSound: {fileID: 0}
   audioVolume: 1
   footstepSoundDelay: 0.75
+  abilities: 
+  DashSpeed: 12
+  DashDuration: 0.15
+  DashCooldown: 0.75
   GroundSpeed: 5
   AirSpeed: 5
   JumpForce: 10
