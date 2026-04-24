@@ -125,7 +125,7 @@ public class RobotSamurai : MonoBehaviour
                 hitbox.Disable();
             }
 
-            if (rb != null)
+            if (rb != null)                                             
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.simulated = false;
@@ -275,6 +275,10 @@ public class RobotSamurai : MonoBehaviour
         }
     }
 
+    public void SetState(string newState)
+    {
+        Enum.TryParse(newState, out state);
+    }
     public void SetState(State newState) //Call this in animation events!! (To determine when the attack ends and stuff)
     {
         state = newState;
@@ -303,6 +307,20 @@ public class RobotSamurai : MonoBehaviour
         //And during that time it would be afflicted with a state effect which would leave it unable to do anything for the length of the animation, letting player get a free hit in
     }
 
+    public void EnableHitbox()
+    {
+        hitbox.Enable();
+    }
+    public void DisableHitbox()
+    {
+        hitbox.Disable();
+    }
+
+    public void Explode()
+    {
+        Debug.Log("GJWIOGJIWOJGE");
+    }
+
     protected virtual void HighAttack()
     {
         if (controlsEnabled == false) { return; }
@@ -314,9 +332,6 @@ public class RobotSamurai : MonoBehaviour
         hitbox.transform.localPosition = new Vector3((HighHitboxSize.x / 2 + HighHitboxOffset.x + .5f) * faceDirection, HighHitboxSize.y / 2 + HighHitboxOffset.y, 0);
 
         animator.Play("Base Layer.HighAttack");
-
-        StartCoroutine(SetStateForDuration(State.HighAttack, 1));
-        StartCoroutine(hitbox.EnableForDuration(.1f));
     }
     protected virtual void LowAttack()
     {
