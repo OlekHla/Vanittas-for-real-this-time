@@ -125,7 +125,7 @@ public class RobotSamurai : MonoBehaviour
                 hitbox.Disable();
             }
 
-            if (rb != null)
+            if (rb != null)                                             
             {
                 rb.linearVelocity = Vector2.zero;
                 rb.simulated = false;
