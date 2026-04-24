@@ -48,7 +48,7 @@ public class Hitbox : MonoBehaviour
         foreach (Collider2D col in res)
         { //Iterating over overlapping colliders
             GameObject targetOwner = col.gameObject; //Getting the owner of the collider (in case we have an enemy with several colliders or smth)
-            if (targetOwner.tag != "Entity") { continue; }
+            if (targetOwner.tag != "Entity" && targetOwner.tag != "Player") { continue; }
             if (hitTargets.Contains(targetOwner))
             { //If this target has already been hit during the lifetime of this attack
                 continue; //Then ignore it and look at other hit targets

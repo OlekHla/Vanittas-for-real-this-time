@@ -291,8 +291,7 @@ public class RobotSamurai : MonoBehaviour
 
         PlaySound(parrySound);
 
-        Debug.Log("Parrying");
-        StartCoroutine(SetStateForDuration(State.Parrying, ParryWindow));
+        animator.Play("Base Layer.Parry");
     }
 
     protected virtual void OnParry()
@@ -449,7 +448,7 @@ public class RobotSamurai : MonoBehaviour
                 PlaySound(hitSound);
 
                 targetSamurai.TakeDamage(1);
-                StartCoroutine(targetSamurai.SetStateForDuration(State.Stunned, 5f));
+                StartCoroutine(targetSamurai.SetStateForDuration(State.Stunned, .1f));
             }
         }
     }

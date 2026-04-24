@@ -78,6 +78,7 @@ public class Player : RobotSamurai
 
         if (Input.GetMouseButtonDown(1))
         {
+            Debug.Log("Parry time...");
             Parry();
         }
         base.Walk(h);

@@ -136,7 +136,7 @@ Transform:
   m_GameObject: {fileID: 1472187676139230168}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 2.55, y: 1.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -289,7 +289,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 999
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 7223c130ef401e04c9b680c1150d86cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -322,18 +322,24 @@ MonoBehaviour:
   spriteRenderer: {fileID: 5507844960589853324}
   spriteFacesRightByDefault: 1
   audioSource: {fileID: -6802678511380462219}
-  highAttackSound: {fileID: 8300000, guid: c5bc583d188d3fa4382292a69ea4b2a4, type: 3}
-  lowAttackSound: {fileID: 8300000, guid: ce750035af9f24846b6f4a926fa07f81, type: 3}
+  highAttackSound: {fileID: 8300000, guid: ce750035af9f24846b6f4a926fa07f81, type: 3}
+  lowAttackSound: {fileID: 8300000, guid: c5bc583d188d3fa4382292a69ea4b2a4, type: 3}
   hitSound: {fileID: 0}
   parrySound: {fileID: 0}
   successfulParrySound: {fileID: 0}
   jumpSound: {fileID: 8300000, guid: e2ab270b6d34cc14694fd5cbab9adfe7, type: 3}
+  doubleJumpSound: {fileID: 0}
+  dashSound: {fileID: 0}
   landSound: {fileID: 0}
   footstepSound: {fileID: 0}
   damageSound: {fileID: 8300000, guid: 96836e163d58ca54da021b362009e854, type: 3}
   deathSound: {fileID: 0}
   audioVolume: 1
   footstepSoundDelay: 0.75
+  abilities: 
+  DashSpeed: 12
+  DashDuration: 0.15
+  DashCooldown: 0.75
   GroundSpeed: 5
   AirSpeed: 5
   JumpForce: 10
@@ -555,7 +561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3739247091389105756
 Transform:
   m_ObjectHideFlags: 0
@@ -621,7 +627,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.5686275}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
