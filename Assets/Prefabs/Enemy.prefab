@@ -252,7 +252,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3183216650170003941
 Transform:
   m_ObjectHideFlags: 0
@@ -379,7 +379,18 @@ MonoBehaviour:
   LowHitboxSize: {x: 2, y: 1}
   LowHitboxOffset: {x: 0, y: -1}
   player: {fileID: 0}
+  playerDetectionMap:
+    serializedVersion: 2
+    m_Bits: 0
+  cutsceneTrap: {fileID: 0}
+  fakePlayerInstance: {fileID: 0}
+  fadeManagerForgiveMe: {fileID: 0}
+  colliderColliderCollider: {fileID: 0}
   PreferableDistance: 2
+  fakePlayer: 0
+  showStarted: 0
+  goalreached: 0
+  walkUntilDistanceIs: 10
 --- !u!50 &7203460062994047656
 Rigidbody2D:
   serializedVersion: 5
