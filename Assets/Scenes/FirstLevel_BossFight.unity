@@ -139,6 +139,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5309873762718766634, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: lowAttackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: c5bc583d188d3fa4382292a69ea4b2a4, type: 3}
+    - target: {fileID: 5309873762718766634, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: highAttackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ce750035af9f24846b6f4a926fa07f81, type: 3}
     - target: {fileID: 7363329010741653920, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.8
@@ -640,6 +648,8 @@ GameObject:
   - component: {fileID: 1485415766}
   - component: {fileID: 1485415762}
   - component: {fileID: 1485415761}
+  - component: {fileID: 1485415767}
+  - component: {fileID: 1485415768}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Entity
@@ -685,7 +695,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
+    oldSize: {x: 1.8733125, y: 2.6495469}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -769,9 +779,9 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7223c130ef401e04c9b680c1150d86cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 2}
@@ -814,21 +824,27 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   hitbox: {fileID: 1597070653}
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 1485415764}
   spriteFacesRightByDefault: 1
-  audioSource: {fileID: 0}
-  highAttackSound: {fileID: 0}
-  lowAttackSound: {fileID: 0}
+  audioSource: {fileID: 1485415768}
+  highAttackSound: {fileID: 8300000, guid: ce750035af9f24846b6f4a926fa07f81, type: 3}
+  lowAttackSound: {fileID: 8300000, guid: c5bc583d188d3fa4382292a69ea4b2a4, type: 3}
   hitSound: {fileID: 0}
   parrySound: {fileID: 0}
   successfulParrySound: {fileID: 0}
-  jumpSound: {fileID: 0}
+  jumpSound: {fileID: 8300000, guid: e2ab270b6d34cc14694fd5cbab9adfe7, type: 3}
+  doubleJumpSound: {fileID: 0}
+  dashSound: {fileID: 0}
   landSound: {fileID: 0}
   footstepSound: {fileID: 0}
-  damageSound: {fileID: 0}
+  damageSound: {fileID: 8300000, guid: 96836e163d58ca54da021b362009e854, type: 3}
   deathSound: {fileID: 0}
   audioVolume: 1
   footstepSoundDelay: 0.25
+  abilities: 
+  DashSpeed: 12
+  DashDuration: 0.15
+  DashCooldown: 0.75
   GroundSpeed: 5
   AirSpeed: 5
   JumpForce: 5
@@ -841,6 +857,125 @@ MonoBehaviour:
   LowHitboxOffset: {x: 0, y: -1}
   player: {fileID: 1099967531}
   PreferableDistance: 2
+--- !u!95 &1485415767
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485415760}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 140db5d66149a4b449bcaf75fb897096, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!82 &1485415768
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485415760}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1597070651
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,11 +1794,11 @@ SceneRoots:
   m_Roots:
   - {fileID: 1682803254}
   - {fileID: 1127812865}
-  - {fileID: 1485415765}
   - {fileID: 1904701777}
   - {fileID: 1653202808}
   - {fileID: 1855561108}
   - {fileID: 1666304476}
   - {fileID: 1431105704}
+  - {fileID: 1485415765}
   - {fileID: 636639297}
   - {fileID: 950488679}
