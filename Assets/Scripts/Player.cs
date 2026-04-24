@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class Player : RobotSamurai
 {
     public Boss boss; //Set this when entering boss room. Used so player always faces the boss
+    public bool disableInput = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,10 +24,13 @@ public class Player : RobotSamurai
     // Update is called once per frame
     new void Update()
     {
+
         base.Update();
 
         if (controlsEnabled == false)
         {
+            animator.SetBool("Walking", false);
+            animator.SetFloat("YVelocity", 0);
             return;
         }
 

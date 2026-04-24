@@ -2,10 +2,38 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Boss : RobotSamurai
 {
     public Player player;
+
+    public LayerMask playerDetectionMap;
+    public Collider2D cutsceneTrap;
+    public Boss fakePlayerInstance;
+    public LevelTransitionManager fadeManagerForgiveMe;
+
+    public Collider2D colliderColliderCollider;
+    protected override void Die()
+    {
+        //Cutscene
+        animator.Play("Base Layer.DeadDrop");
+        rb.bodyType = RigidbodyType2D.Static;
+        colliderColliderCollider.isTrigger = true;
+        rb.linearVelocity = new Vector2(0, 0);
+    }
+
+    private bool cutsceneEnabled = false;
+    private bool cutsceneEnded = false;
+    protected void Cutscene()
+    {
+        Debug.Log("CUTSCENE");
+        cutsceneEnabled = true;
+        fakePlayerInstance.gameObject.SetActive(true);
+        fakePlayerInstance.showStarted = true;
+        player.SetControlsEnabled(false);
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -162,8 +190,59 @@ public class Boss : RobotSamurai
 
     List<Action> actions = new List<Action>() { new Action("HighAttack"), new Action("LowAttack"), new Action("Parry"), new Action("Jump"), new Action("WalkForward", .75f), new Action("WalkBackwards", .75f), new Action("Bait", 1f) };
 
-    void Update()
+
+    public bool fakePlayer = false;
+    public bool showStarted = false;
+    public bool goalreached = false;
+    public float walkUntilDistanceIs = 10;
+
+    private float cutsceneEndTimer = 1f;
+
+    new void Update()
     {
+        if (fakePlayer)
+        {
+            if (showStarted)
+            {
+                Walk(faceDirection); //Walk forward
+                if(Math.Abs(transform.position.x - player.transform.position.x) <= walkUntilDistanceIs) //Until a certain preset point
+                {
+                    showStarted = false; //and then stop
+                    goalreached = true;
+                    Walk(0);
+                    return;
+                }
+            }
+            return;
+        }
+
+        base.Update();
+
+        List<Collider2D> res = new List<Collider2D>();
+        ContactFilter2D groundContactFilter = new ContactFilter2D();
+        groundContactFilter.layerMask = playerDetectionMap;
+        groundContactFilter.useLayerMask = true;
+        int hits = cutsceneTrap.Overlap(groundContactFilter, res);
+
+        if(!cutsceneEnabled && hits > 0 && Health <= 0)
+        {
+            Cutscene();
+        }
+        if (cutsceneEnabled && !cutsceneEnded && fakePlayerInstance.goalreached)
+        {
+            cutsceneEndTimer -= Time.deltaTime;
+            if(cutsceneEndTimer <= 0)
+            {
+                cutsceneEnded = true;
+                StartCoroutine(fadeManagerForgiveMe.Fade(0f, 1f, 5));
+            }
+        }
+
+        if(Health <= 0)
+        {
+            return;
+        }
+
         if (player == null)
         {
             player = UnityEngine.Object.FindFirstObjectByType<Player>();
