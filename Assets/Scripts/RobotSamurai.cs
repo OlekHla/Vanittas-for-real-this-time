@@ -14,6 +14,7 @@ public class RobotSamurai : MonoBehaviour
     [SerializeField] private LayerMask groundDetectionLayerMask;
     [SerializeField] private Hitbox hitbox;
 
+    private Animator animator;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Boolean spriteFacesRightByDefault = true;
 
@@ -94,6 +95,11 @@ public class RobotSamurai : MonoBehaviour
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        if (animator == null)
+        {
+            animator = gameObject.GetComponent<Animator>();
         }
 
         audioSource.playOnAwake = false;
@@ -306,7 +312,10 @@ public class RobotSamurai : MonoBehaviour
 
         hitbox.transform.localScale = HighHitboxSize;
         hitbox.transform.localPosition = new Vector3((HighHitboxSize.x / 2 + HighHitboxOffset.x + .5f) * faceDirection, HighHitboxSize.y / 2 + HighHitboxOffset.y, 0);
-        StartCoroutine(SetStateForDuration(State.HighAttack, .25f));
+
+        animator.Play("Base Layer.HighAttack");
+
+        StartCoroutine(SetStateForDuration(State.HighAttack, 1));
         StartCoroutine(hitbox.EnableForDuration(.1f));
     }
     protected virtual void LowAttack()
@@ -318,6 +327,9 @@ public class RobotSamurai : MonoBehaviour
 
         hitbox.transform.localScale = LowHitboxSize;
         hitbox.transform.localPosition = new Vector3((LowHitboxSize.x / 2 + LowHitboxOffset.x + .5f) * faceDirection, LowHitboxSize.y / 2 + LowHitboxOffset.y, 0);
+
+        animator.Play("Base Layer.LowAttack");
+
         StartCoroutine(SetStateForDuration(State.LowAttack, .25f));
         StartCoroutine(hitbox.EnableForDuration(.1f));
     }
@@ -441,6 +453,8 @@ public class RobotSamurai : MonoBehaviour
             return;
         }
 
+        animator.SetBool("Walking", Math.Round(h) != 0);
+
         TryPlayFootstepSound(h);
 
         //Play animation
@@ -486,8 +500,25 @@ public class RobotSamurai : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
+        animator.SetFloat("YVelocity", rb.linearVelocity.y);
+
+        /*switch (state)
+        {
+            case State.None:
+                {
+                    animator.SetInteger("CurrentState", 0);
+                    break;
+                }
+            case State.HighAttack:
+                {
+                    animator.SetInteger("CurrentState", 1);
+                    break;
+                }
+            default:
+                break;
+        }*/
     }
 
     private void LateUpdate()
