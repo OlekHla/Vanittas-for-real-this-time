@@ -29,6 +29,7 @@ public class Hitbox : MonoBehaviour
             return;
         }
 
+        Debug.Log("HIT");
         ownerSamurai.OnLandHit(col);
     }
 

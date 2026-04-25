@@ -301,6 +301,10 @@ PrefabInstance:
       propertyPath: walkSoundDelay
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5309873762718766634, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: HighHitboxSize.x
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5507844960589853324, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_Size.x
       value: 1.8733125
@@ -349,6 +353,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6271061230072461000, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: d39734675ce6dd5419067a0adde00f50, type: 2}
     - target: {fileID: 6271061230072461000, guid: 02a67b5b6dd5fcf4586df48167074353, type: 3}
       propertyPath: m_GravityScale
       value: 2

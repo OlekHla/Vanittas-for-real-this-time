@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Boss : RobotSamurai
 {
@@ -111,6 +112,7 @@ public class Boss : RobotSamurai
         if (fadeManagerForgiveMe != null)
         {
             yield return StartCoroutine(fadeManagerForgiveMe.Fade(0f, 1f, fadeDuration));
+            SceneManager.LoadScene(1);
         }
         else
         {
@@ -290,8 +292,10 @@ public class Boss : RobotSamurai
         int r = UnityEngine.Random.Range(0, possibleActions.Count);
         Action action = possibleActions[r];
 
-        Debug.Log(action.name);
-
+        if (transform.position.x > 14 && (action.name == "WalkBackwards" || action.name == "Bait"))
+        {
+            return;
+        }
         currentAction = action;
         StartCoroutine(currentActionCountdownorsomthishngs(action.duration));
         Invoke(action.name, 0);

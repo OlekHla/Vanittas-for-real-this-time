@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -46,6 +47,7 @@ public class RobotSamurai : MonoBehaviour
     [SerializeField] private float AirSpeed;
     [SerializeField] private float JumpForce;
 
+    [SerializeField] protected TMP_Text HealthUI;
     [SerializeField] protected float Health;
     [SerializeField] private float MaxHealth;
 
@@ -403,9 +405,10 @@ public class RobotSamurai : MonoBehaviour
         PlaySound(damageSound);
 
         Health = Mathf.Clamp(Health - amount, 0, MaxHealth);
-        Debug.Log(Health);
+        HealthUI.text = Health.ToString();
         if (Health <= 0)
         {
+            HealthUI.text = "";
             Die();
         }
     }
@@ -436,19 +439,18 @@ public class RobotSamurai : MonoBehaviour
         }
         else if (state == State.LowAttack)
         {
-            Debug.Log("bruh.");
-            if (targetSamurai.onGround == false)
+            Debug.Log("HIT!!!!");
+            /*if (targetSamurai.onGround == false)
             {
                 Debug.Log("sfjwioqjgwqg");
                 //Jumped over ggez
             }
             else
-            {
-                PlaySound(hitSound);
+            {*/
+            PlaySound(hitSound);
 
-                targetSamurai.TakeDamage(1);
-                StartCoroutine(targetSamurai.SetStateForDuration(State.Stunned, .1f));
-            }
+            targetSamurai.TakeDamage(1);
+            StartCoroutine(targetSamurai.SetStateForDuration(State.Stunned, .1f));
         }
     }
 
